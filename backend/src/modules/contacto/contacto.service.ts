@@ -1,14 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-
-export interface ContactoDto {
-  nombre: string;
-  email: string;
-  telefono?: string;
-  servicio: string;
-  mensaje: string;
-}
+import { ContactoDto } from './contacto.dto';
 
 @Injectable()
 export class ContactoService {
