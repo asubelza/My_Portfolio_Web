@@ -1,0 +1,5 @@
+# https://subelzacg.com.ar/robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://subelzacg.com.ar/sitemap.xml

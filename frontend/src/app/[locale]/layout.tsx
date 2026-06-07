@@ -36,18 +36,49 @@ const metadataByLocale: Record<string, { title: string; description: string; key
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const meta = metadataByLocale[locale] || metadataByLocale.es;
+  const baseUrl = 'https://subelzacg.com.ar';
+  const ogImage = `${baseUrl}/og-image.png`;
   
   return {
+    metadataBase: new URL(baseUrl),
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords.split(', '),
-    authors: [{ name: "Subelza CG" }],
+    authors: [{ name: 'Subelza CG', url: baseUrl }],
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        es: '/es',
+        en: '/en',
+        pt: '/pt',
+      },
+    },
     openGraph: {
       title: meta.title,
       description: meta.description,
+      url: `/${locale}`,
+      siteName: 'Subelza CG',
       type: 'website',
       locale: locale,
       alternateLocale: ['es', 'en', 'pt'],
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: 'Subelza CG - Consultora de Ingeniería de Software',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta.title,
+      description: meta.description,
+      images: [ogImage],
+    },
+    robots: {
+      index: true,
+      follow: true,
     },
   };
 }
@@ -67,8 +98,32 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Subelza CG',
+    url: 'https://subelzacg.com.ar',
+    logo: 'https://subelzacg.com.ar/og-image.png',
+    description: 'Consultora de Ingeniería de Software especializada en IA, Automatizaciones y Desarrollo a Medida',
+    foundingDate: '2023',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      email: process.env.EMAIL_USER || 'contacto@subelzacg.com.ar',
+    },
+    sameAs: [
+      'https://github.com/asubelza',
+    ],
+  };
+
   return (
     <html lang={locale}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`min-h-screen bg-background text-foreground antialiased ${geistSans.variable}`}>
         <ErrorBoundary>
           <ToastProvider>
