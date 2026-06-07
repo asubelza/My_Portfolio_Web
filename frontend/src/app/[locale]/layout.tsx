@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const meta = metadataByLocale[locale] || metadataByLocale.es;
   const baseUrl = 'https://subelzacg.com.ar';
-  const ogImage = `${baseUrl}/og-image.png`;
+  const ogImage = `${baseUrl}/og-image.svg`;
   
   return {
     metadataBase: new URL(baseUrl),
@@ -103,7 +103,7 @@ export default async function LocaleLayout({
     '@type': 'Organization',
     name: 'Subelza CG',
     url: 'https://subelzacg.com.ar',
-    logo: 'https://subelzacg.com.ar/og-image.png',
+    logo: 'https://subelzacg.com.ar/og-image.svg',
     description: 'Consultora de Ingeniería de Software especializada en IA, Automatizaciones y Desarrollo a Medida',
     foundingDate: '2023',
     contactPoint: {
