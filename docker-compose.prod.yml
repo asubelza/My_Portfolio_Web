@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: myportfolio-db
+    restart: always
+    env_file: .env
+    ports:
+      - "127.0.0.1:5433:5432"  # Solo accesible desde el servidor (no público)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: myportfolio-api
+    restart: always
+    ports:
+      - "127.0.0.1:4001:3001"  # Solo accesible desde Nginx
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=https://tudominio.com/api
+    container_name: myportfolio-web
+    restart: always
+    ports:
+      - "127.0.0.1:4000:3000"  # Solo accesible desde Nginx
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

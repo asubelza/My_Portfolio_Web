@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: myportfolio-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: portfolio
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: myportfolio-api
+    ports:
+      - "4001:3001"
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=portfolio
+      - PORT=3001
+      - EMAIL_USER=tuemail@gmail.com
+      - EMAIL_PASSWORD=xxxx xxxx xxxx xxxx
+      - EMAIL_DESTINO=tuemail@gmail.com
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: myportfolio-web
+    ports:
+      - "4000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4001
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
