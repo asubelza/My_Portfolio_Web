@@ -32,7 +32,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=https://tudominio.com/api
+        - NEXT_PUBLIC_API_URL=https://subelzacg.com.ar/api
     container_name: myportfolio-web
     restart: always
     ports:
