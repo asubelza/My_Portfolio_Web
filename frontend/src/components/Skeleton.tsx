@@ -53,6 +53,24 @@ export function SkeletonServices() {
   );
 }
 
+export function SectionSkeleton() {
+  return (
+    <section className="py-24 bg-background">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity }} className="space-y-6">
+          <div className="h-8 w-48 mx-auto rounded bg-surface-elevated" />
+          <div className="h-4 w-96 mx-auto rounded bg-surface-elevated" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-48 rounded-2xl bg-surface-elevated" />
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 export function SkeletonContact() {
   return (
     <section className="py-24 bg-surface">
